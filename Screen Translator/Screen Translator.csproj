@@ -7,4 +7,49 @@
         <UseWPF>true</UseWPF>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+      <PackageReference Include="System.Globalization" Version="4.3.0" />
+      <PackageReference Include="System.Runtime.Caching" Version="7.0.0" />
+      <PackageReference Include="Tesseract" Version="5.2.0" />
+      <PackageReference Include="WPF-UI" Version="3.0.0-preview.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Update="Views\Windows\MainWindow.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
+    </ItemGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Assets\applicationIcon-256.png" />
+      <None Include="bin\Debug\net7.0-windows\tessdata\eng.traineddata" />
+      <None Include="bin\Debug\net7.0-windows\tessdata\pdf.ttf" />
+      <Resource Include="Assets\applicationIcon-256.png" />
+      <None Remove="applicationIcon.ico" />
+      <Resource Include="applicationIcon.ico" />
+    </ItemGroup>
+
+    <ItemGroup>
+    <None Update="phototest.tif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="tessdata\eng.traineddata">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="tessdata\pdf.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+</ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="bin\Debug\net7.0-windows" />
+    </ItemGroup>
+    
 </Project>

@@ -1,0 +1,142 @@
+﻿<Page
+    x:Class="Screen_Translator.Views.Pages.Settings.GeneralPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Screen_Translator.Views.Pages.Settings"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+    ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    mc:Ignorable="d">
+    <Grid HorizontalAlignment="Stretch">
+        <StackPanel>
+            <StackPanel>
+                <Label
+                    Margin="15,15,0,0"
+                    Content="Appearance"
+                    FontSize="15" />
+                <ui:Card Margin="10,0,10,10" Padding="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label
+                            Grid.Column="0"
+                            VerticalContentAlignment="Center"
+                            Content="Theme"
+                            FontSize="15" />
+                        <ComboBox
+                            x:Name="ThemeCheckBox"
+                            Grid.Column="1"
+                            Width="150"
+                            SelectionChanged="ThemeCheckBox_OnSelectionChanged">
+                            <ComboBoxItem Content="Dark" Tag="1" />
+                            <ComboBoxItem Content="Light" Tag="3" />
+                            <ComboBoxItem Content="Auto" Tag="-1" />
+                        </ComboBox>
+                    </Grid>
+                </ui:Card>
+                <ui:Card Margin="10,0,10,10" Padding="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label
+                            Grid.Column="0"
+                            VerticalContentAlignment="Center"
+                            Content="Language"
+                            FontSize="15" />
+                        <ComboBox Grid.Column="1" Width="150" />
+                    </Grid>
+                </ui:Card>
+            </StackPanel>
+            <StackPanel>
+                <Label
+                    Margin="15,15,0,0"
+                    Content="App"
+                    FontSize="15" />
+                <ui:Card Margin="10,0,10,10" Padding="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label
+                            Grid.Column="0"
+                            VerticalContentAlignment="Center"
+                            Content="Minimize to tray"
+                            FontSize="15" />
+                        <ui:ToggleSwitch
+                            x:Name="MinimizeToTrayToggleSwitch"
+                            Grid.Column="1"
+                            Margin="0,0,5,0"
+                            Checked="MinimizeToTrayToggleSwitch_OnStatusChanged"
+                            Unchecked="MinimizeToTrayToggleSwitch_OnStatusChanged" />
+                    </Grid>
+                </ui:Card>
+                <ui:Card Margin="10,0,10,10" Padding="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label
+                            Grid.Column="0"
+                            VerticalContentAlignment="Center"
+                            Content="Start minimized"
+                            FontSize="15" />
+                        <ui:ToggleSwitch
+                            x:Name="StartMinimizedToggleSwitch"
+                            Grid.Column="1"
+                            Margin="0,0,5,0"
+                            Checked="StartMinimizedToggleSwitch_OnStatusChanged"
+                            Unchecked="StartMinimizedToggleSwitch_OnStatusChanged" />
+                    </Grid>
+                </ui:Card>
+                <ui:Card Margin="10,0,10,10" Padding="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label
+                            Grid.Column="0"
+                            VerticalContentAlignment="Center"
+                            Content="Minimize instead of closing"
+                            FontSize="15" />
+                        <ui:ToggleSwitch
+                            x:Name="MinimizeInsteadOfClosingToggleSwitch"
+                            Grid.Column="1"
+                            Margin="0,0,5,0"
+                            Checked="MinimizeInsteadOfClosingToggleSwitch_OnStatusChanged"
+                            Unchecked="MinimizeInsteadOfClosingToggleSwitch_OnStatusChanged" />
+                    </Grid>
+                </ui:Card>
+                <ui:Card Margin="10,0,10,10" Padding="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label
+                            Grid.Column="0"
+                            VerticalContentAlignment="Center"
+                            Content="Run on system startup"
+                            FontSize="15" />
+                        <ui:ToggleSwitch
+                            x:Name="StartupToggleSwitch"
+                            Grid.Column="1"
+                            Margin="0,0,5,0"
+                            Checked="StartupToggleSwitch_OnStatusChanged"
+                            Unchecked="StartupToggleSwitch_OnStatusChanged" />
+                    </Grid>
+                </ui:Card>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>
