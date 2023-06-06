@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Windows;
-using Screen_Translator.Models;
 using Screen_Translator.Service;
 using Wpf.Ui.Common;
 using Wpf.Ui.Controls;
@@ -19,8 +19,8 @@ public partial class TesseractLanguage : UserControl
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
-        var language = DataContext as Language;
-        if (language!.IsDownloaded)
+        var language = (DataContext as CultureInfo)!;
+        if (App.DownloadedLanguages.Contains(language))
         {
             DownloadButton.Icon = SymbolRegular.Delete48;
             DownloadButton.Appearance = ControlAppearance.Danger;
@@ -29,18 +29,18 @@ public partial class TesseractLanguage : UserControl
 
     private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
     {
-        var language = DataContext as Language;
-        if (language!.IsDownloaded)
+        var language = (DataContext as CultureInfo)!;
+        if (App.DownloadedLanguages.Contains(language))
         {
-            language.IsDownloaded = false;
-            File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tessdata", $"{language.Code}.traineddata"));
+            App.DownloadedLanguages.Remove(language);
+            File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tessdata", $"{language.ThreeLetterISOLanguageName}.traineddata"));
             SetStyleButton(SymbolRegular.ArrowDownload48, ControlAppearance.Primary);
         }
         else
         {
             SetStyleButton(SymbolRegular.ClockArrowDownload24, ControlAppearance.Info);
             await Translator.Download(language); // TODO Catch network error
-            if (language.IsDownloaded)
+            if (App.DownloadedLanguages.Contains(language))
                 SetStyleButton(SymbolRegular.Delete48, ControlAppearance.Danger);
             else
             {
@@ -48,7 +48,7 @@ public partial class TesseractLanguage : UserControl
                 // TODO Notify the user that the download has finished not successfully
             }
         }
-        App.Cache.UpdateDownloadedLanguages();
+        App.UpdateDownloadedLanguages();
     }
 
     private void SetStyleButton(SymbolRegular icon, ControlAppearance appearance)

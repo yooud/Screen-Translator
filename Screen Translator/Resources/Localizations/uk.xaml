@@ -1,0 +1,23 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:v="clr-namespace:System;assembly=mscorlib">
+    <v:String x:Key="WindowTitle">Екранний перекладач</v:String>
+    <v:String x:Key="TypeSomething">Введіть щось...</v:String>
+    <v:String x:Key="Translation">Переклад</v:String>
+    <v:String x:Key="Translate">Перекласти</v:String>
+    <v:String x:Key="General">Загальне</v:String>
+    <v:String x:Key="Languages">Мови</v:String>
+    <v:String x:Key="Back">Назад</v:String>
+    <v:String x:Key="RecognitionLanguage">Мова розпізнавання</v:String>
+    <v:String x:Key="OpenFolder">Відкрити папку</v:String>
+    <v:String x:Key="AddLanguage">Додати мову</v:String>
+    <v:String x:Key="Appearance">Зовнішній вигляд</v:String>
+    <v:String x:Key="Theme">Тема</v:String>
+    <v:String x:Key="Language">Мова</v:String>
+    <v:String x:Key="Application">Застосунок</v:String>
+    <v:String x:Key="MinimizeToTray">Згорнути в трей</v:String>
+    <v:String x:Key="StartMinimized">Почати згорнуто</v:String>
+    <v:String x:Key="MinimizeInsteadOfClosing">Згорнути замість закриття</v:String>
+    <v:String x:Key="Startup">Запуск під час запуску системи</v:String>
+</ResourceDictionary>

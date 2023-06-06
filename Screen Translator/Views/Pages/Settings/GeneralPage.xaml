@@ -16,7 +16,7 @@
             <StackPanel>
                 <Label
                     Margin="15,15,0,0"
-                    Content="Appearance"
+                    Content="{DynamicResource Appearance}"
                     FontSize="15" />
                 <ui:Card Margin="10,0,10,10" Padding="10">
                     <Grid>
@@ -27,7 +27,7 @@
                         <Label
                             Grid.Column="0"
                             VerticalContentAlignment="Center"
-                            Content="Theme"
+                            Content="{DynamicResource Theme}"
                             FontSize="15" />
                         <ComboBox
                             x:Name="ThemeCheckBox"
@@ -49,16 +49,26 @@
                         <Label
                             Grid.Column="0"
                             VerticalContentAlignment="Center"
-                            Content="Language"
+                            Content="{DynamicResource Language}"
                             FontSize="15" />
-                        <ComboBox Grid.Column="1" Width="150" />
+                        <ComboBox
+                            x:Name="LanguageComboBox"
+                            Grid.Column="1"
+                            Width="150"
+                            SelectionChanged="LanguageComboBox_OnSelectionChanged">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DisplayName}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                     </Grid>
                 </ui:Card>
             </StackPanel>
             <StackPanel>
                 <Label
                     Margin="15,15,0,0"
-                    Content="App"
+                    Content="{DynamicResource Application}"
                     FontSize="15" />
                 <ui:Card Margin="10,0,10,10" Padding="10">
                     <Grid>
@@ -69,7 +79,7 @@
                         <Label
                             Grid.Column="0"
                             VerticalContentAlignment="Center"
-                            Content="Minimize to tray"
+                            Content="{DynamicResource MinimizeToTray}"
                             FontSize="15" />
                         <ui:ToggleSwitch
                             x:Name="MinimizeToTrayToggleSwitch"
@@ -88,7 +98,7 @@
                         <Label
                             Grid.Column="0"
                             VerticalContentAlignment="Center"
-                            Content="Start minimized"
+                            Content="{DynamicResource StartMinimized}"
                             FontSize="15" />
                         <ui:ToggleSwitch
                             x:Name="StartMinimizedToggleSwitch"
@@ -107,7 +117,7 @@
                         <Label
                             Grid.Column="0"
                             VerticalContentAlignment="Center"
-                            Content="Minimize instead of closing"
+                            Content="{DynamicResource MinimizeInsteadOfClosing}"
                             FontSize="15" />
                         <ui:ToggleSwitch
                             x:Name="MinimizeInsteadOfClosingToggleSwitch"
@@ -126,7 +136,7 @@
                         <Label
                             Grid.Column="0"
                             VerticalContentAlignment="Center"
-                            Content="Run on system startup"
+                            Content="{DynamicResource Startup}"
                             FontSize="15" />
                         <ui:ToggleSwitch
                             x:Name="StartupToggleSwitch"

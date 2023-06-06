@@ -1,77 +1,124 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using Screen_Translator.Models;
+
+using Screen_Translator.Properties;
 using Screen_Translator.Service;
 using Wpf.Ui.Appearance;
+using Translator = Screen_Translator.Service.Translator;
 
-namespace Screen_Translator
+namespace Screen_Translator;
+
+public partial class App : Application
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    public static event Action? LanguagesUpdated;
+
+    public static string[] LocalizationLanguages { get => Current.Resources["LocalizationLanguages"] as string[]; }
+    public static CultureInfo[] TranslationLanguages;
+    public static CultureInfo[] Tessdata;
+    public static List<CultureInfo> DownloadedLanguages = new();
+    public static event Action<string> LanguageUpdated;
+    public static CultureInfo? Language
     {
-        public static Cache Cache { get; } = new ();
-        public static Language[] TranslationLanguage;
-        public static Language[] Tessdata;
-
-        protected override void OnStartup(StartupEventArgs e)
+        set
         {
-            var path = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-            var processName = Process.GetCurrentProcess().MainModule!.FileName;
-            Cache.Load();
-            Cache.Settings!.Startup = StartupManager.IsStartupEnabled();
-            List<Language> languages = new();
+            if (value is null || value.LCID == 127)
+                value = new CultureInfo("en");
             
-            foreach (var code in Cache.Settings!.TranslationLanguages)
-            {
-                var name = new CultureInfo(code).DisplayName;
-                languages.Add(new (Capitalize(name), code));
-            }
-            TranslationLanguage = languages.OrderBy(l => l.DisplayName).ToArray();
-            
-            languages.Clear();
-            foreach (var code in Cache.Settings!.Tessdata)
-            {
-                var name = new CultureInfo(code).DisplayName;
-                var language = new Language(Capitalize(name), code);
-                if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tessdata", $"{code}.traineddata")))
-                    language.IsDownloaded = true;
-                languages.Add(language);
-            }
-            Tessdata = languages.OrderBy(l => l.DisplayName).ToArray();
-            if (Cache.Settings!.CurrentLanguage is null)
-                Cache.Settings.CurrentLanguage = Tessdata.First(l => l.IsDownloaded).Code;
+            if (value.LCID == CultureInfo.CurrentUICulture.LCID)
+                return;
 
-            Theme.Changed += ThemeOnChanged;
-            base.OnStartup(e);
+            if (!LocalizationLanguages.Contains(value.Name))
+                throw new ArgumentException("Language not supported");
+
+            Appearance.Default.Language = value;
+            CultureInfo.CurrentUICulture = value;
+
+            var dict = new ResourceDictionary
+            {
+                Source = new Uri($"Resources/Localizations/{value}.xaml", UriKind.RelativeOrAbsolute)
+            };
+
+            var oldDict = Current.Resources.MergedDictionaries
+                .FirstOrDefault(d => d.Source?.OriginalString.StartsWith("Resources/Localizations") is true);
+            if (oldDict is not null)
+                Current.Resources.MergedDictionaries[Current.Resources.MergedDictionaries.IndexOf(oldDict)] = dict;
+            else
+                Current.Resources.MergedDictionaries.Add(dict);
+            LanguagesUpdated?.Invoke();
         }
+    }
 
-        protected override void OnExit(ExitEventArgs e)
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        Language = Appearance.Default.Language;
+        Appearance.Default.Startup = StartupManager.IsStartupEnabled();
+        if (Screen_Translator.Properties.Tesseract.Default.Languages is null || 
+            Screen_Translator.Properties.Translator.Default.Languages is null)
+            Task.Run(UpdateLanguages).Wait();
+
+        List<CultureInfo> languages = new();
+
+        foreach (var code in Screen_Translator.Properties.Translator.Default.Languages!)
+            languages.Add(new(code));
+
+        TranslationLanguages = languages.OrderBy(l => l.DisplayName).ToArray();
+
+        languages.Clear();
+        foreach (var code in Screen_Translator.Properties.Tesseract.Default.Languages!)
         {
-            base.OnExit(e);
-            Cache.Save();
+            var language = new CultureInfo(code);
+            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tessdata", $"{language.ThreeLetterISOLanguageName}.traineddata")))
+                DownloadedLanguages.Add(language);
+            languages.Add(language);
         }
+        
+        Tessdata = languages.OrderBy(l => l.DisplayName).ToArray();
+        if (Screen_Translator.Properties.Tesseract.Default.Language is null)
+            Screen_Translator.Properties.Tesseract.Default.Language = DownloadedLanguages[0];
 
-        private void ThemeOnChanged(ThemeType currentTheme, Color systemAccent)
+        Theme.Changed += ThemeOnChanged;
+        base.OnStartup(e);
+    }
+
+    private void UpdateLanguages()
+    {
+        Screen_Translator.Properties.Tesseract.Default.Languages = new StringCollection();
+        Screen_Translator.Properties.Tesseract.Default.Languages.AddRange(Translator.GetTessdata().GetAwaiter().GetResult());
+        Screen_Translator.Properties.Translator.Default.Languages = new StringCollection();
+        Screen_Translator.Properties.Translator.Default.Languages.AddRange(Translator.GetLangauges().GetAwaiter().GetResult());
+        Screen_Translator.Properties.Translator.Default.Source = new CultureInfo(Screen_Translator.Properties.Translator.Default.Languages[0]!);
+        Screen_Translator.Properties.Translator.Default.Target = new CultureInfo(Screen_Translator.Properties.Translator.Default.Languages[1]!);
+    }
+
+    private void ThemeOnChanged(ThemeType currentTheme, Color systemAccent)
+    {
+        if (Appearance.Default.Theme != -1)
         {
-            if (Cache.Settings!.Theme != "-1")
-            {
-                var theme = (ThemeType)Convert.ToInt32(Cache.Settings.Theme);
-                if (theme != currentTheme) 
-                    Theme.Apply(theme);
-            }
+            var theme = (ThemeType)Appearance.Default.Theme;
+            if (theme != currentTheme)
+                Theme.Apply(theme);
         }
+    }
+    
+    protected override void OnExit(ExitEventArgs e)
+    {
+        base.OnExit(e);
+        Screen_Translator.Properties.Translator.Default.Save();
+        Screen_Translator.Properties.Tesseract.Default.Save();
+        Screen_Translator.Properties.Appearance.Default.Save();
+    }
 
-        private string Capitalize(string str) => char.ToUpper(str[0]) + str[1..];
+    public static void UpdateDownloadedLanguages() => LanguagesUpdated?.Invoke();
+
+    private static void UpdateLanguagesNames(string language)
+    {
+        var languages = App.TranslationLanguages;
     }
 }

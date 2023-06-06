@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:Screen_Translator"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    Title="Екранний Перекладач"
+    Title="{DynamicResource Title}"
     Width="850"
     Height="500"
     MinWidth="600"
@@ -55,7 +55,13 @@
                     x:Name="SourceComboBox"
                     Grid.Column="2"
                     HorizontalContentAlignment="Stretch"
-                    SelectionChanged="SourceComboBox_OnSelectionChanged" />
+                    SelectionChanged="SourceComboBox_OnSelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DisplayName}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                 <ui:Button
                     x:Name="SwapButton"
                     Grid.Column="3"
@@ -71,7 +77,13 @@
                     x:Name="OutputComboBox"
                     Grid.Column="4"
                     HorizontalContentAlignment="Stretch"
-                    SelectionChanged="OutputComboBox_OnSelectionChanged" />
+                    SelectionChanged="OutputComboBox_OnSelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DisplayName}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                 <ui:Button
                     x:Name="SettingsButton"
                     Grid.Column="6"
@@ -99,7 +111,7 @@
                     VerticalAlignment="Stretch"
                     AcceptsReturn="True"
                     FontSize="15"
-                    PlaceholderText="Введіть щось..."
+                    PlaceholderText="{DynamicResource TypeSomething}"
                     TextChanged="SourceTextBox_OnTextChanged"
                     TextWrapping="Wrap" />
                 <ui:ProgressRing
@@ -115,7 +127,7 @@
                     AcceptsReturn="True"
                     FontSize="15"
                     IsReadOnly="True"
-                    PlaceholderText="Переклад"
+                    PlaceholderText="{DynamicResource Translation}"
                     TextWrapping="Wrap" />
                 <Label
                     x:Name="CharactersCountLabel"
@@ -131,17 +143,17 @@
                 HorizontalAlignment="Stretch"
                 Appearance="Primary"
                 Click="TranslateButton_OnClick"
-                Content="Перекласти" />
+                Content="{DynamicResource Translate}" />
         </Grid>
 
         <ui:TitleBar
-            Title="Екранний Перекладач"
+            Title="{DynamicResource WindowTitle}"
             Grid.Row="0"
             Background="{DynamicResource ApplicationBackgroundBrush}"
-            Icon="pack://application:,,,/Assets/applicationIcon-256.png">
+            Icon="pack://application:,,,/Resources/Assets/applicationIcon-256.png">
 
             <ui:TitleBar.Tray>
-                <ui:NotifyIcon Icon="pack://application:,,,/Assets/applicationIcon-256.png">
+                <ui:NotifyIcon Icon="pack://application:,,,/Resources/Assets/applicationIcon-256.png">
                     <ui:NotifyIcon.Menu>
                         <ContextMenu ItemsSource="{Binding ViewModel.TrayMenuItems, Mode=OneWay}" />
                     </ui:NotifyIcon.Menu>

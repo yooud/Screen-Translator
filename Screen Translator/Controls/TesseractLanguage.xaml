@@ -14,7 +14,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <Label Grid.Column="0" Content="{Binding}" />
+        <Label Grid.Column="0" Content="{Binding DisplayName}" />
         <ui:Button
             x:Name="DownloadButton"
             Grid.Column="1"

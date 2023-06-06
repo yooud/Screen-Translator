@@ -1,10 +1,10 @@
-﻿using Microsoft.Win32;
+﻿using System;
 using System.Windows;
-using System;
+using Microsoft.Win32;
 
 namespace Screen_Translator.Service;
 
-public static class StartupManager // TODO Check to work
+public static class StartupManager
 {
     private const string Key = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
 

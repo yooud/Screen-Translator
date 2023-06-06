@@ -6,7 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Screen_Translator.Views.Pages.Settings"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:Screen_Translator.Models"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -31,7 +30,7 @@
                 <Label
                     Grid.Column="0"
                     VerticalContentAlignment="Center"
-                    Content="Мова розпізнавання"
+                    Content="{DynamicResource RecognitionLanguage}"
                     FontSize="15" />
                 <ComboBox
                     x:Name="DetectableLanguageComboBox"
@@ -51,7 +50,7 @@
                 Margin="10,0,5,5"
                 HorizontalAlignment="Stretch"
                 Click="OpenFolderButton_OnClick"
-                Content="Відкрити папку"
+                Content="{DynamicResource OpenFolder}"
                 Icon="Folder48" />
             <ui:Button
                 x:Name="AddLanguageButton"
@@ -59,7 +58,7 @@
                 Margin="5,0,10,5"
                 HorizontalAlignment="Stretch"
                 Click="AddLanguageButton_OnClick"
-                Content="Додати мову"
+                Content="{DynamicResource AddLanguage}"
                 Icon="DocumentAdd48" />
         </Grid>
         <ui:Card

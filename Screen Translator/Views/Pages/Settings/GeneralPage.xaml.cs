@@ -1,9 +1,13 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Animation;
 using Screen_Translator.Helpers;
+using Screen_Translator.Properties;
 using Screen_Translator.Service;
 using Wpf.Ui.Appearance;
 using ComboBox = System.Windows.Controls.ComboBox;
+using CultureInfo = System.Globalization.CultureInfo;
 
 namespace Screen_Translator.Views.Pages.Settings;
 
@@ -13,37 +17,51 @@ public partial class GeneralPage : Page
     {
         InitializeComponent();
         foreach (ComboBoxItem item in ThemeCheckBox.Items)
-            if (item.Tag.ToString() == App.Cache.Settings!.Theme)
+            if (Convert.ToInt32(item.Tag) == Appearance.Default.Theme)
                 ThemeCheckBox.SelectedItem = item;
-        
-        MinimizeToTrayToggleSwitch.IsChecked = App.Cache.Settings!.MinimizeToTray;
-        StartMinimizedToggleSwitch.IsChecked = App.Cache.Settings!.StartMinimized;
-        MinimizeInsteadOfClosingToggleSwitch.IsChecked = App.Cache.Settings!.MinimizeInsteadOfClosing;
-        StartupToggleSwitch.IsChecked = App.Cache.Settings!.Startup;
+
+        foreach (var language in App.LocalizationLanguages)
+        {
+            LanguageComboBox.Items.Add(new CultureInfo(language));
+            if (Appearance.Default.Language.Name == language)
+                LanguageComboBox.SelectedIndex = LanguageComboBox.Items.Count - 1;
+        }
+
+        MinimizeToTrayToggleSwitch.IsChecked = Appearance.Default.MinimizeToTray;
+        StartMinimizedToggleSwitch.IsChecked = Appearance.Default.StartMinimized;
+        MinimizeInsteadOfClosingToggleSwitch.IsChecked = Appearance.Default.MinimizeInsteadOfClosing;
+        StartupToggleSwitch.IsChecked = Appearance.Default.Startup;
     }
 
     private void ThemeCheckBox_OnSelectionChanged(object sender, SelectionChangedEventArgs _)
     {
-        var item = ((sender as ComboBox)?.SelectedItem as ComboBoxItem)!;
-        App.Cache.Settings!.Theme = item.Tag.ToString()!;
-        Theme.Apply(ThemeTypeConverter.Convert(App.Cache.Settings.Theme));
+        var item = (ThemeCheckBox.SelectedItem as ComboBoxItem)!;
+        Appearance.Default.Theme = Convert.ToInt32(item.Tag);
+        Theme.Apply(ThemeTypeConverter.Convert(Appearance.Default.Theme));
     }
 
     private void MinimizeToTrayToggleSwitch_OnStatusChanged(object sender, RoutedEventArgs e) =>
-        App.Cache.Settings!.MinimizeToTray = MinimizeToTrayToggleSwitch.IsChecked ?? false;
+        Appearance.Default.MinimizeToTray = MinimizeToTrayToggleSwitch.IsChecked ?? false;
 
     private void StartMinimizedToggleSwitch_OnStatusChanged(object sender, RoutedEventArgs e) =>
-        App.Cache.Settings!.StartMinimized = StartMinimizedToggleSwitch.IsChecked?? false;
+        Appearance.Default.StartMinimized = StartMinimizedToggleSwitch.IsChecked ?? false;
 
-    private void MinimizeInsteadOfClosingToggleSwitch_OnStatusChanged(object sender, RoutedEventArgs e) => 
-        App.Cache.Settings!.MinimizeInsteadOfClosing = MinimizeInsteadOfClosingToggleSwitch.IsChecked ?? false;
+    private void MinimizeInsteadOfClosingToggleSwitch_OnStatusChanged(object sender, RoutedEventArgs e) =>
+        Appearance.Default.MinimizeInsteadOfClosing = MinimizeInsteadOfClosingToggleSwitch.IsChecked ?? false;
 
     private void StartupToggleSwitch_OnStatusChanged(object sender, RoutedEventArgs e)
     {
-        App.Cache.Settings!.Startup = StartupToggleSwitch.IsChecked ?? false;
-        if (App.Cache.Settings!.Startup)
+        Appearance.Default.Startup = StartupToggleSwitch.IsChecked ?? false;
+        if (Appearance.Default.Startup)
             StartupManager.EnableStartup();
-        else 
+        else
             StartupManager.DisableStartup();
+    }
+
+    private void LanguageComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var language = LanguageComboBox.SelectedItem as CultureInfo;
+        if (language is not null)
+            App.Language = language;
     }
 }

@@ -31,18 +31,18 @@
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem
                     Width="200"
-                    Content="Загальне"
+                    Content="{DynamicResource General}"
                     TargetPageType="pages:GeneralPage" />
                 <ui:NavigationViewItem
                     Width="200"
-                    Content="Мови"
+                    Content="{DynamicResource Languages}"
                     TargetPageType="pages:LanguagesPage" />
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.PaneFooter>
                 <ui:Button
                     Width="200"
                     Click="ButtonBase_OnClick"
-                    Content="Назад"
+                    Content="{DynamicResource Back}"
                     Icon="ArrowLeft48" />
             </ui:NavigationView.PaneFooter>
             <ui:NavigationView.ContentOverlay>
