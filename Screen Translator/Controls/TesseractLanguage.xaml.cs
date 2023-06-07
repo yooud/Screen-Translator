@@ -48,7 +48,6 @@ public partial class TesseractLanguage : UserControl
                 // TODO Notify the user that the download has finished not successfully
             }
         }
-        App.UpdateDownloadedLanguages();
     }
 
     private void SetStyleButton(SymbolRegular icon, ControlAppearance appearance)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-
+using Screen_Translator.Helpers;
 using Screen_Translator.Properties;
 using Screen_Translator.Service;
 using Wpf.Ui.Appearance;
@@ -17,13 +18,11 @@ namespace Screen_Translator;
 
 public partial class App : Application
 {
-    public static event Action? LanguagesUpdated;
-
-    public static string[] LocalizationLanguages { get => Current.Resources["LocalizationLanguages"] as string[]; }
+    public static CultureInfo[] LocalizationLanguages;
     public static CultureInfo[] TranslationLanguages;
     public static CultureInfo[] Tessdata;
     public static List<CultureInfo> DownloadedLanguages = new();
-    public static event Action<string> LanguageUpdated;
+    public static event Action LanguageChanged;
     public static CultureInfo? Language
     {
         set
@@ -31,10 +30,10 @@ public partial class App : Application
             if (value is null || value.LCID == 127)
                 value = new CultureInfo("en");
             
-            if (value.LCID == CultureInfo.CurrentUICulture.LCID)
+            if (Equals(value, CultureInfo.CurrentUICulture))
                 return;
 
-            if (!LocalizationLanguages.Contains(value.Name))
+            if (!LocalizationLanguages.Contains(value))
                 throw new ArgumentException("Language not supported");
 
             Appearance.Default.Language = value;
@@ -51,14 +50,29 @@ public partial class App : Application
                 Current.Resources.MergedDictionaries[Current.Resources.MergedDictionaries.IndexOf(oldDict)] = dict;
             else
                 Current.Resources.MergedDictionaries.Add(dict);
-            LanguagesUpdated?.Invoke();
+            LanguageChanged?.Invoke();
         }
+    }
+
+    public App()
+    {
+        Theme.Changed += ThemeOnChanged;
     }
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        Language = Appearance.Default.Language;
+        // Screen_Translator.Properties.Translator.Default.Reset();
+        // Screen_Translator.Properties.Tesseract.Default.Reset();
+        // Screen_Translator.Properties.Appearance.Default.Reset();
+        var localizations = Current.Resources["LocalizationLanguages"] as string[];
+        List<CultureInfo> localizedCultures = new();
+        if (localizations is not null)
+            foreach (var local in localizations)
+                localizedCultures.Add(new CultureInfo(local));
+        LocalizationLanguages = localizedCultures.ToArray();
+        
         Appearance.Default.Startup = StartupManager.IsStartupEnabled();
+
         if (Screen_Translator.Properties.Tesseract.Default.Languages is null || 
             Screen_Translator.Properties.Translator.Default.Languages is null)
             Task.Run(UpdateLanguages).Wait();
@@ -68,7 +82,7 @@ public partial class App : Application
         foreach (var code in Screen_Translator.Properties.Translator.Default.Languages!)
             languages.Add(new(code));
 
-        TranslationLanguages = languages.OrderBy(l => l.DisplayName).ToArray();
+        TranslationLanguages = languages.ToArray();
 
         languages.Clear();
         foreach (var code in Screen_Translator.Properties.Tesseract.Default.Languages!)
@@ -78,12 +92,11 @@ public partial class App : Application
                 DownloadedLanguages.Add(language);
             languages.Add(language);
         }
-        
-        Tessdata = languages.OrderBy(l => l.DisplayName).ToArray();
+
+        Tessdata = languages.ToArray();
         if (Screen_Translator.Properties.Tesseract.Default.Language is null)
             Screen_Translator.Properties.Tesseract.Default.Language = DownloadedLanguages[0];
-
-        Theme.Changed += ThemeOnChanged;
+        Language = Appearance.Default.Language;
         base.OnStartup(e);
     }
 
@@ -113,12 +126,5 @@ public partial class App : Application
         Screen_Translator.Properties.Translator.Default.Save();
         Screen_Translator.Properties.Tesseract.Default.Save();
         Screen_Translator.Properties.Appearance.Default.Save();
-    }
-
-    public static void UpdateDownloadedLanguages() => LanguagesUpdated?.Invoke();
-
-    private static void UpdateLanguagesNames(string language)
-    {
-        var languages = App.TranslationLanguages;
     }
 }

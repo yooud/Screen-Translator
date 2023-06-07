@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cc="clr-namespace:Screen_Translator.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Screen_Translator.Views.Pages.Settings"
+    xmlns:helpers="clr-namespace:Screen_Translator.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     d:DesignHeight="450"
@@ -12,6 +12,9 @@
     ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
     ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
+    <Page.Resources>
+        <helpers:CapitalizeConverter x:Key="CapitalizeConverter" />
+    </Page.Resources>
     <Grid HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -36,7 +39,13 @@
                     x:Name="DetectableLanguageComboBox"
                     Grid.Column="1"
                     Width="200"
-                    SelectionChanged="DetectableLanguageComboBox_OnSelectionChanged" />
+                    SelectionChanged="DetectableLanguageComboBox_OnSelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DisplayName, Converter={StaticResource CapitalizeConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </Grid>
         </ui:Card>
         <Grid Grid.Row="1">

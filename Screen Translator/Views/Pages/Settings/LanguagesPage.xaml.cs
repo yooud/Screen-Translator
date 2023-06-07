@@ -13,26 +13,21 @@ public partial class LanguagesPage : Page
     public LanguagesPage()
     {
         InitializeComponent();
-        TessdataListView.ItemsSource = App.Tessdata;
-        App.LanguagesUpdated += OnUpdatedLanguages;
-        App.UpdateDownloadedLanguages();
+        App.LanguageChanged += OnLanguageChanged;
+        OnLanguageChanged();
     }
 
-    private void OnUpdatedLanguages()
+    private void OnLanguageChanged()
     {
-        DetectableLanguageComboBox.Items.Clear();
-        foreach (var language in App.DownloadedLanguages.OrderBy(l => l.DisplayName))
-        {
-            DetectableLanguageComboBox.Items.Add(language);
-            if (Properties.Tesseract.Default.Language.LCID == language.LCID)
-                DetectableLanguageComboBox.SelectedItem = language;
-        }
-
+        DetectableLanguageComboBox.ItemsSource = App.DownloadedLanguages.OrderBy(l => l.DisplayName);
         if (DetectableLanguageComboBox.Items.Count == 1 || DetectableLanguageComboBox.SelectedItem is null)
-        {
             DetectableLanguageComboBox.SelectedIndex = 0;
+        else if (DetectableLanguageComboBox.Items.Count > 1)
+            DetectableLanguageComboBox.SelectedItem = App.DownloadedLanguages.First(l => Equals(l, Properties.Tesseract.Default.Language));
+        if (DetectableLanguageComboBox.SelectedItem is not null)
             Properties.Tesseract.Default.Language = DetectableLanguageComboBox.SelectedItem as CultureInfo;
-        }
+        
+        TessdataListView.ItemsSource = App.Tessdata.OrderBy(l => l.DisplayName);
     }
 
     private void OpenFolderButton_OnClick(object sender, RoutedEventArgs e) =>

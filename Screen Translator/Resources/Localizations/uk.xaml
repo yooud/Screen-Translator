@@ -20,4 +20,10 @@
     <v:String x:Key="StartMinimized">Почати згорнуто</v:String>
     <v:String x:Key="MinimizeInsteadOfClosing">Згорнути замість закриття</v:String>
     <v:String x:Key="Startup">Запуск під час запуску системи</v:String>
+    <v:String x:Key="ToolTipScanScreen">Сканувати екран</v:String>
+    <v:String x:Key="ToolTipSwapLanguages">Поміняти мови</v:String>
+    <v:String x:Key="ToolTipSettings">Налаштування</v:String>
+    <v:String x:Key="ThemeDark">Темна</v:String>
+    <v:String x:Key="ThemeLight">Світла</v:String>
+    <v:String x:Key="ThemeAuto">Авто</v:String>
 </ResourceDictionary>

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -17,7 +15,7 @@ using Wpf.Ui.Controls.Window;
 
 namespace Screen_Translator.Views.Windows
 {
-    public partial class MainWindow : FluentWindow, INotifyPropertyChanged
+    public partial class MainWindow : FluentWindow
     {
         public BitmapSource ImageScan = null!;
         private SettingsWindow _settingsWindow;
@@ -27,10 +25,10 @@ namespace Screen_Translator.Views.Windows
         {
             Watcher.Watch(this);
             InitializeComponent();
-            UpdateComboBoxes();
             Loaded += OnLoad;
             Closing += OnClosing;
-            App.LanguagesUpdated += () => OnPropertyChanged(nameof(App.TranslationLanguages));
+            App.LanguageChanged += OnLanguageChanged;
+            OnLanguageChanged();
         }
 
         private void OnClosing(object? sender, CancelEventArgs e)
@@ -62,13 +60,16 @@ namespace Screen_Translator.Views.Windows
                 ShowInTaskbar = !Properties.Appearance.Default.MinimizeToTray;
         }
 
-        private void UpdateComboBoxes()
+        private void OnLanguageChanged()
         {
-            SourceComboBox.ItemsSource = App.TranslationLanguages;
-            OutputComboBox.ItemsSource = App.TranslationLanguages;
+            SourceComboBox.ItemsSource = null;
+            OutputComboBox.ItemsSource = null;
+            
+            SourceComboBox.ItemsSource = App.TranslationLanguages.OrderBy(l => l.DisplayName);
+            OutputComboBox.ItemsSource = App.TranslationLanguages.OrderBy(l => l.DisplayName);
 
-            SourceComboBox.SelectedItem = App.TranslationLanguages.First(l => l.LCID == Properties.Translator.Default.Source.LCID);
-            OutputComboBox.SelectedItem = App.TranslationLanguages.First(l => l.LCID == Properties.Translator.Default.Target.LCID);
+            SourceComboBox.SelectedItem = App.TranslationLanguages.First(l => Equals(l, Properties.Translator.Default.Source));
+            OutputComboBox.SelectedItem = App.TranslationLanguages.First(l => Equals(l, Properties.Translator.Default.Target));
         }
 
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e) => _settingsWindow.Show();
@@ -135,24 +136,9 @@ namespace Screen_Translator.Views.Windows
             (SourceComboBox.SelectedItem, OutputComboBox.SelectedItem) = (OutputComboBox.SelectedItem, SourceComboBox.SelectedItem);
 
         private void SourceComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) =>
-            Properties.Translator.Default.Source = SourceComboBox.SelectedItem as CultureInfo;
+            Properties.Translator.Default.Source = SourceComboBox.SelectedItem as CultureInfo ?? Properties.Translator.Default.Source;
 
         private void OutputComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) =>
-            Properties.Translator.Default.Target = OutputComboBox.SelectedItem as CultureInfo;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-            field = value;
-            OnPropertyChanged(propertyName);
-            return true;
-        }
+            Properties.Translator.Default.Target = OutputComboBox.SelectedItem as CultureInfo ?? Properties.Translator.Default.Target;
     }
 }

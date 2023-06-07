@@ -20,4 +20,10 @@
     <v:String x:Key="StartMinimized">Start minimized</v:String>
     <v:String x:Key="MinimizeInsteadOfClosing">Minimize instead of closing</v:String>
     <v:String x:Key="Startup">Run on system startup</v:String>
+    <v:String x:Key="ToolTipScanScreen">Scan screen</v:String>
+    <v:String x:Key="ToolTipSwapLanguages">Swap languages</v:String>
+    <v:String x:Key="ToolTipSettings">Settings</v:String>
+    <v:String x:Key="ThemeDark">Dark</v:String>
+    <v:String x:Key="ThemeLight">Light</v:String>
+    <v:String x:Key="ThemeAuto">Auto</v:String>
 </ResourceDictionary>

@@ -11,7 +11,7 @@ namespace Screen_Translator.Service;
 
 public static class Translator
 {
-    private const string Url = "http://localhost:8080";
+    private const string Url = "http://130.162.253.73:7878";
 
     public static async Task<string[]> GetLangauges()
     {
