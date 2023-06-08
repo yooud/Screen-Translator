@@ -37,7 +37,7 @@ public partial class App : Application
                 return;
 
             if (!LocalizationLanguages.Contains(value))
-                throw new ArgumentException("Language not supported");
+                value = new CultureInfo("en");
 
             Appearance.Default.Language = value;
             CultureInfo.CurrentUICulture = value;

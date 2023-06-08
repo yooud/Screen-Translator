@@ -44,9 +44,4 @@ public partial class LanguagesPage : Page
         if (box?.SelectedItem is CultureInfo language)
             Properties.Tesseract.Default.Language = language;
     }
-
-    private void AddLanguageButton_OnClick(object sender, RoutedEventArgs e)
-    {
-        throw new NotImplementedException();
-    }
 }

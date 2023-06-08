@@ -1,10 +1,10 @@
+from deep_translator import GoogleTranslator
+from aiohttp.web import *
+import requests
+import logging
 import json
 import os
 
-import requests
-from aiohttp.web import *
-from deep_translator import GoogleTranslator
-import logging
 
 TESSDATA_DIR = '/tessdata'
 TESSDATA_URL = 'https://api.github.com/repos/tesseract-ocr/tessdata/contents'
@@ -73,4 +73,4 @@ if __name__ == '__main__':
                     post('/api/languages', languages),
                     post('/api/tessdata', tessdata),
                     post('/api/tessdata/{data}', tessdata)])
-    run_app(app)
+    run_app(app, port=7878)
