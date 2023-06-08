@@ -14,8 +14,8 @@ namespace Screen_Translator.Views.Windows
 {
     public partial class SnippingWindow : Window
     {
-        private System.Windows.Point _startPoint;
         private BitmapImage _imageBitmap = null!;
+        private System.Windows.Point _startPoint;
         private readonly MainWindow _owner;
 
         public SnippingWindow(MainWindow owner)
@@ -36,7 +36,8 @@ namespace Screen_Translator.Views.Windows
 
         private void SnippingWindow_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape) DialogResult = false;
+            if (e.Key == Key.Escape) 
+                DialogResult = false;
         }
 
         private void GetImage()
@@ -58,11 +59,13 @@ namespace Screen_Translator.Views.Windows
 
             Screenshot.Source = _imageBitmap;
         }
-        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => _startPoint = e.GetPosition(SnippingCanvas);
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => 
+            _startPoint = e.GetPosition(SnippingCanvas);
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton != MouseButtonState.Pressed) return;
+            if (e.LeftButton != MouseButtonState.Pressed) 
+                return;
 
             var currentPosition = e.GetPosition(SnippingCanvas);
             var width = Math.Abs(currentPosition.X - _startPoint.X);
@@ -131,23 +134,20 @@ namespace Screen_Translator.Views.Windows
                 PixelFormats.Pbgra32);
 
             renderTargetBitmap.Render(Screenshot);
-
-            var croppedBitmap = new CroppedBitmap(
-                _imageBitmap,
-                new Int32Rect((int)left, (int)top, (int)width, (int)height));
-
-            return croppedBitmap;
+            return new CroppedBitmap(_imageBitmap, new Int32Rect((int)left, (int)top, (int)width, (int)height));
         }
 
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (SelectionRectangle.Width > 0 || SelectionRectangle.Height > 0)
             {
-                _owner.ImageScan = CaptureImage(SelectionRectangle);
+                _owner.ImageToScan = CaptureImage(SelectionRectangle);
                 DialogResult = true;
             }
             else
+            {
                 DialogResult = false;
+            }
         }
     }
 }

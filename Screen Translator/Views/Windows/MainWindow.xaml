@@ -15,6 +15,7 @@
     ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     ExtendsContentIntoTitleBar="True"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    Loaded="OnLoad"
     WindowBackdropType="Mica"
     WindowCornerPreference="Round"
     WindowStartupLocation="CenterScreen"
@@ -118,9 +119,8 @@
                     TextChanged="SourceTextBox_OnTextChanged"
                     TextWrapping="Wrap" />
                 <ui:ProgressRing
-                    x:Name="ProgressRing"
+                    x:Name="TesseractProgressRing"
                     Grid.Column="0"
-                    IsEnabled="False"
                     IsIndeterminate="True"
                     Visibility="Hidden" />
                 <ui:TextBox
@@ -132,6 +132,11 @@
                     IsReadOnly="True"
                     PlaceholderText="{DynamicResource Translation}"
                     TextWrapping="Wrap" />
+                <ui:ProgressRing
+                    x:Name="TranslationProgressRing"
+                    Grid.Column="2"
+                    IsIndeterminate="True"
+                    Visibility="Hidden" />
                 <Label
                     x:Name="CharactersCountLabel"
                     Grid.Column="0"
@@ -148,7 +153,6 @@
                 Click="TranslateButton_OnClick"
                 Content="{DynamicResource Translate}" />
         </Grid>
-
         <ui:TitleBar
             Title="{DynamicResource WindowTitle}"
             Grid.Row="0"
@@ -156,12 +160,20 @@
             Icon="pack://application:,,,/Resources/Assets/applicationIcon-256.png">
 
             <ui:TitleBar.Tray>
-                <ui:NotifyIcon Icon="pack://application:,,,/Resources/Assets/applicationIcon-256.png">
+                <ui:NotifyIcon x:Name="NotifyIcon" Icon="pack://application:,,,/Resources/Assets/applicationIcon-256.png">
                     <ui:NotifyIcon.Menu>
-                        <ContextMenu ItemsSource="{Binding ViewModel.TrayMenuItems, Mode=OneWay}" />
+                        <ContextMenu>
+                            <MenuItem Click="OpenMenuItem_OnClick" Header="{DynamicResource Open}" />
+                            <MenuItem Click="ScanScreenButton_OnClick" Header="{DynamicResource ToolTipScanScreen}" />
+                            <MenuItem Click="ExitMenuItem_OnClick" Header="{DynamicResource Exit}" />
+                        </ContextMenu>
                     </ui:NotifyIcon.Menu>
                 </ui:NotifyIcon>
             </ui:TitleBar.Tray>
         </ui:TitleBar>
+        <ui:Snackbar
+            x:Name="Snackbar"
+            Grid.Row="1"
+            Timeout="10000" />
     </Grid>
 </ui:FluentWindow>

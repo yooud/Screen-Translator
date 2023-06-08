@@ -14,12 +14,17 @@ public partial class LanguagesPage : Page
     {
         InitializeComponent();
         App.LanguageChanged += OnLanguageChanged;
+        App.DownloadedLanguagesUpdated += OnLanguageChanged;
         OnLanguageChanged();
     }
 
     private void OnLanguageChanged()
     {
+        DetectableLanguageComboBox.ItemsSource = null;
+        TessdataListView.ItemsSource = null;
+        
         DetectableLanguageComboBox.ItemsSource = App.DownloadedLanguages.OrderBy(l => l.DisplayName);
+        DetectableLanguageComboBox.SelectedItem = App.DownloadedLanguages.First(l => Equals(l, Properties.Tesseract.Default.Language));
         if (DetectableLanguageComboBox.Items.Count == 1 || DetectableLanguageComboBox.SelectedItem is null)
             DetectableLanguageComboBox.SelectedIndex = 0;
         else if (DetectableLanguageComboBox.Items.Count > 1)

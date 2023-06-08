@@ -32,6 +32,11 @@
         <XamlRuntime>Wpf</XamlRuntime>
         <SubType>Designer</SubType>
       </Page>
+      <Page Update="Resources\Localizations\ru.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
     </ItemGroup>
 
     <ItemGroup>
@@ -43,7 +48,6 @@
       <None Include="bin\Debug\net7.0-windows\tessdata\eng.traineddata" />
       <None Include="bin\Debug\net7.0-windows\tessdata\pdf.ttf" />
       <None Remove="applicationIcon.ico" />
-      <Resource Include="applicationIcon.ico" />
       <Resource Include="Resources\Assets\applicationIcon-256.png" />
     </ItemGroup>
 

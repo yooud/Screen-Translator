@@ -29,13 +29,14 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
+                            Padding="10,0,0,0"
                             VerticalContentAlignment="Center"
                             Content="{DynamicResource Theme}"
                             FontSize="15" />
                         <ComboBox
                             x:Name="ThemeCheckBox"
                             Grid.Column="1"
-                            Width="150"
+                            Width="200"
                             SelectionChanged="ThemeCheckBox_OnSelectionChanged">
                             <ComboBoxItem Content="{DynamicResource ThemeDark}" Tag="1" />
                             <ComboBoxItem Content="{DynamicResource ThemeLight}" Tag="3" />
@@ -51,13 +52,14 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
+                            Padding="10,0,0,0"
                             VerticalContentAlignment="Center"
                             Content="{DynamicResource Language}"
                             FontSize="15" />
                         <ComboBox
                             x:Name="LanguageComboBox"
                             Grid.Column="1"
-                            Width="150"
+                            Width="200"
                             SelectionChanged="LanguageComboBox_OnSelectionChanged">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -81,6 +83,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
+                            Padding="10,0,0,0"
                             VerticalContentAlignment="Center"
                             Content="{DynamicResource MinimizeToTray}"
                             FontSize="15" />
@@ -100,6 +103,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
+                            Padding="10,0,0,0"
                             VerticalContentAlignment="Center"
                             Content="{DynamicResource StartMinimized}"
                             FontSize="15" />
@@ -119,6 +123,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
+                            Padding="10,0,0,0"
                             VerticalContentAlignment="Center"
                             Content="{DynamicResource MinimizeInsteadOfClosing}"
                             FontSize="15" />
@@ -138,6 +143,7 @@
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
+                            Padding="10,0,0,0"
                             VerticalContentAlignment="Center"
                             Content="{DynamicResource Startup}"
                             FontSize="15" />

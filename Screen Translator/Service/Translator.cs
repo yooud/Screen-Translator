@@ -58,6 +58,7 @@ public static class Translator
                 fileStream = new FileStream(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tessdata", $"{language.ThreeLetterISOLanguageName}.traineddata"), FileMode.Create, FileAccess.Write);
             await contentStream.CopyToAsync(fileStream);
             App.DownloadedLanguages.Add(language);
+            App.UpdateDownloadedLanguages();
         }
     }
 }

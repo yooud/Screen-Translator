@@ -26,4 +26,16 @@
     <v:String x:Key="ThemeDark">Dark</v:String>
     <v:String x:Key="ThemeLight">Light</v:String>
     <v:String x:Key="ThemeAuto">Auto</v:String>
+    <v:String x:Key="Open">Open</v:String>
+    <v:String x:Key="Exit">Exit</v:String>
+    <v:String x:Key="NetworkErrorTitle">Network Error</v:String>
+    <v:String x:Key="NetworkErrorMessage">Unable to connect to the server. Please check your internet connection.</v:String>
+    <v:String x:Key="UnknownErrorTitle">Unknown Error</v:String>
+    <v:String x:Key="UnknownErrorMessage">An unknown error occurred. Please try again.</v:String>
+    <v:String x:Key="DownloadSuccessfulTitle">Language downloaded successfully</v:String>
+    <v:String x:Key="DownloadSuccessfulMessage">The selected language has been downloaded successfully.</v:String>
+    <v:String x:Key="DeleteSuccessfulTitle">Language deleted successfully</v:String>
+    <v:String x:Key="DeleteSuccessfulMessage">The selected language has been deleted successfully.</v:String>
+    <v:String x:Key="RecognitionErrorTitle">Text Recognition Error</v:String>
+    <v:String x:Key="RecognitionErrorMessage">An error occurred during text recognition.</v:String>
 </ResourceDictionary>

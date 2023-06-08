@@ -22,7 +22,8 @@ public partial class SettingsWindow : FluentWindow
 
     private void OnKeyUp(object sender, KeyEventArgs e)
     {
-        if (e.Key == Key.Escape) Hide();
+        if (e.Key == Key.Escape) 
+            Hide();
     }
 
     public void CenterOnParent()

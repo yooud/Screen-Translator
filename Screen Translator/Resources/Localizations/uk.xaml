@@ -26,4 +26,16 @@
     <v:String x:Key="ThemeDark">Темна</v:String>
     <v:String x:Key="ThemeLight">Світла</v:String>
     <v:String x:Key="ThemeAuto">Авто</v:String>
+    <v:String x:Key="Open">Відкрити</v:String>
+    <v:String x:Key="Exit">Вийти</v:String>
+    <v:String x:Key="NetworkErrorTitle">Помилка мережі</v:String>
+    <v:String x:Key="NetworkErrorMessage">Не вдалося підключитися до сервера. Перевірте підключення до Інтернету.</v:String>
+    <v:String x:Key="UnknownErrorTitle">Невідома помилка</v:String>
+    <v:String x:Key="UnknownErrorMessage">Виникла невідома помилка. Будь ласка, спробуйте ще раз.</v:String>
+    <v:String x:Key="DownloadSuccessfulTitle">Мова успішно завантажена</v:String>
+    <v:String x:Key="DownloadSuccessfulMessage">Обрану мову успішно завантажено.</v:String>
+    <v:String x:Key="DeleteSuccessfulTitle">Мову успішно видалено</v:String>
+    <v:String x:Key="DeleteSuccessfulMessage">Обрану мову успішно видалено.</v:String>
+    <v:String x:Key="RecognitionErrorTitle">Помилка розпізнавання тексту</v:String>
+    <v:String x:Key="RecognitionErrorMessage">Під час розпізнавання тексту виникла помилка.</v:String>
 </ResourceDictionary>

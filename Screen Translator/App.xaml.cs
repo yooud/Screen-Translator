@@ -8,10 +8,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using Screen_Translator.Helpers;
 using Screen_Translator.Properties;
 using Screen_Translator.Service;
+using Screen_Translator.Views.Windows;
 using Wpf.Ui.Appearance;
+using Wpf.Ui.Common;
+using Wpf.Ui.Controls;
 using Translator = Screen_Translator.Service.Translator;
 
 namespace Screen_Translator;
@@ -21,7 +23,8 @@ public partial class App : Application
     public static CultureInfo[] LocalizationLanguages;
     public static CultureInfo[] TranslationLanguages;
     public static CultureInfo[] Tessdata;
-    public static List<CultureInfo> DownloadedLanguages = new();
+    public static readonly List<CultureInfo> DownloadedLanguages = new ();
+    public static event Action DownloadedLanguagesUpdated;
     public static event Action LanguageChanged;
     public static CultureInfo? Language
     {
@@ -61,9 +64,6 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        // Screen_Translator.Properties.Translator.Default.Reset();
-        // Screen_Translator.Properties.Tesseract.Default.Reset();
-        // Screen_Translator.Properties.Appearance.Default.Reset();
         var localizations = Current.Resources["LocalizationLanguages"] as string[];
         List<CultureInfo> localizedCultures = new();
         if (localizations is not null)
@@ -102,12 +102,29 @@ public partial class App : Application
 
     private void UpdateLanguages()
     {
-        Screen_Translator.Properties.Tesseract.Default.Languages = new StringCollection();
-        Screen_Translator.Properties.Tesseract.Default.Languages.AddRange(Translator.GetTessdata().GetAwaiter().GetResult());
-        Screen_Translator.Properties.Translator.Default.Languages = new StringCollection();
-        Screen_Translator.Properties.Translator.Default.Languages.AddRange(Translator.GetLangauges().GetAwaiter().GetResult());
-        Screen_Translator.Properties.Translator.Default.Source = new CultureInfo(Screen_Translator.Properties.Translator.Default.Languages[0]!);
-        Screen_Translator.Properties.Translator.Default.Target = new CultureInfo(Screen_Translator.Properties.Translator.Default.Languages[1]!);
+        try
+        {
+            Screen_Translator.Properties.Tesseract.Default.Languages = new StringCollection();
+            Screen_Translator.Properties.Tesseract.Default.Languages.AddRange(Translator.GetTessdata().GetAwaiter().GetResult());
+            Screen_Translator.Properties.Translator.Default.Languages = new StringCollection();
+            Screen_Translator.Properties.Translator.Default.Languages.AddRange(Translator.GetLangauges().GetAwaiter().GetResult());
+            Screen_Translator.Properties.Translator.Default.Source = new CultureInfo(Screen_Translator.Properties.Translator.Default.Languages[0]!);
+            Screen_Translator.Properties.Translator.Default.Target = new CultureInfo(Screen_Translator.Properties.Translator.Default.Languages[1]!);
+        }
+        catch (System.Net.Http.HttpRequestException)
+        {
+            (Current.MainWindow as MainWindow)?.Snackbar.Show(FindResource("NetworkErrorTitle")?.ToString()!, 
+                FindResource("NetworkErrorMessage")?.ToString()!,
+                SymbolRegular.WifiWarning24,
+                ControlAppearance.Danger);
+        }
+        catch (Exception)
+        {
+            (Current.MainWindow as MainWindow)?.Snackbar.Show(FindResource("UnknownErrorTitle")?.ToString()!,
+                FindResource("UnknownErrorMessage")?.ToString()!, 
+                SymbolRegular.Warning28, 
+                ControlAppearance.Caution);
+        }
     }
 
     private void ThemeOnChanged(ThemeType currentTheme, Color systemAccent)
@@ -127,4 +144,6 @@ public partial class App : Application
         Screen_Translator.Properties.Tesseract.Default.Save();
         Screen_Translator.Properties.Appearance.Default.Save();
     }
+
+    public static void UpdateDownloadedLanguages() => DownloadedLanguagesUpdated?.Invoke();
 }

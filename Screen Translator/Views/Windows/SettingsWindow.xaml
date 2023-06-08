@@ -47,7 +47,7 @@
             </ui:NavigationView.PaneFooter>
             <ui:NavigationView.ContentOverlay>
                 <Grid>
-                    <ui:Snackbar x:Name="RootSnackbar" />
+                    <ui:Snackbar x:Name="Snackbar" Timeout="10000" />
                 </Grid>
             </ui:NavigationView.ContentOverlay>
         </ui:NavigationView>

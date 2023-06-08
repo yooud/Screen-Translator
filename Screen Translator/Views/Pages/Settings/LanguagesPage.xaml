@@ -32,6 +32,7 @@
                 </Grid.ColumnDefinitions>
                 <Label
                     Grid.Column="0"
+                    Padding="10,0,0,0"
                     VerticalContentAlignment="Center"
                     Content="{DynamicResource RecognitionLanguage}"
                     FontSize="15" />

@@ -17,6 +17,7 @@
             <x:Array x:Key="LocalizationLanguages" Type="sys:String">
                 <sys:String>uk</sys:String>
                 <sys:String>en</sys:String>
+                <sys:String>ru</sys:String>
             </x:Array>
         </ResourceDictionary>
     </Application.Resources>
