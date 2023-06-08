@@ -94,7 +94,8 @@ public partial class App : Application
         }
 
         Tessdata = languages.ToArray();
-        if (Screen_Translator.Properties.Tesseract.Default.Language is null)
+        if (Screen_Translator.Properties.Tesseract.Default.Language is null || 
+            Screen_Translator.Properties.Tesseract.Default.Language.LCID == 127)
             Screen_Translator.Properties.Tesseract.Default.Language = DownloadedLanguages[0];
         Language = Appearance.Default.Language;
         base.OnStartup(e);
